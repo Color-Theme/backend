@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql_container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      retries: 5
+    networks:
+      - default
+
+
+  minio:
+    image: minio/minio
+    container_name: minio_container
+    restart: always
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: admin123
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - default
+
+  nestjs:
+    build: .
+    container_name: nestjs_container
+    restart: always
+    depends_on:
+      - mysql
+      - minio
+    environment:
+      NODE_ENV: dev
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_USER: myuser
+      MYSQL_PASS: mypassword
+      MYSQL_DB: mydatabase
+      MINIO_END_POINT: minio
+      MINIO_PORT: 9000
+      MINIO_ACCESS_KEY: ie6bzq4fSzLHKG1f2L1E
+      MINIO_SECRET_KEY: ta60puhaZpXHOAOXF38NDdfVWWKOtLwdwPY0G9pT
+      SERVER_PORT: 3000
+      SERVER_NAME: authentication-service
+      SECRET_KEY_JWT: abc
+      SECRET_KEY_PAYLOAD: abc
+      APP_API_KEY: cde
+      WEB_URL: http://localhost:3000
+
+
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    command: >
+      sh -c "npm run typeorm migration:run -- -d ./src/config/database.ts && npm run start"
+    networks:
+      - default
+
+
+volumes:
+  mysql_data:
+  minio_data:
