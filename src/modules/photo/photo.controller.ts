@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { PhotoService } from './photo.service'
-import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger'
+import {ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags} from '@nestjs/swagger'
 import { ListImageDto, UploadFileDto } from '../../dto/create-file.dto'
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'
 
@@ -23,6 +23,7 @@ export class PhotoController {
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   @ApiOperation({ summary: 'Upload File' })
+  @ApiBearerAuth()
   @ApiConsumes('multipart/form-data')
   @UseGuards(JwtAuthGuard)
   @ApiBody({
@@ -44,8 +45,14 @@ export class PhotoController {
   }
 
   @Get('list')
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   async listImage(@Query()  params :ListImageDto) {
     return await this.photoService.listImage(params)
+  }
+
+  @Post('upload-image-folder')
+  async uploadImageFolder() {
+    return await this.photoService.uploadImageFolder()
   }
 }

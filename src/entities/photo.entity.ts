@@ -40,7 +40,7 @@ export class Photo extends BaseEntity {
   @Column({ name: 'pre_url_webp_expires_at', type: 'timestamp', nullable: true })
   preUrlWebpExpiresAt: Date | null
 
-  @ManyToOne(() => Category, (category) => category.photos, { nullable: false, onDelete: 'CASCADE' })
+  @ManyToOne(() => Category, (category) => category.photos, { nullable: true, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'category_id' })
   category: Category;
 }

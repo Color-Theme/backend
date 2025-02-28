@@ -69,7 +69,7 @@ services:
     volumes:
       - .:/app
     command: >
-      sh -c "npm run typeorm migration:run -- -d ./src/config/database.ts && npm run start"
+      sh -c "npm run start && npm run typeorm migration:run -- -d ./src/config/database.ts"
     networks:
       - default
 
