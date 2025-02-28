@@ -38,40 +38,40 @@ services:
     networks:
       - default
 
-  nestjs:
-    build: .
-    container_name: nestjs_container
-    restart: always
-    depends_on:
-      - mysql
-      - minio
-    environment:
-      NODE_ENV: dev
-      MYSQL_HOST: mysql
-      MYSQL_PORT: 3306
-      MYSQL_USER: myuser
-      MYSQL_PASS: mypassword
-      MYSQL_DB: mydatabase
-      MINIO_END_POINT: minio
-      MINIO_PORT: 9000
-      MINIO_ACCESS_KEY: ie6bzq4fSzLHKG1f2L1E
-      MINIO_SECRET_KEY: ta60puhaZpXHOAOXF38NDdfVWWKOtLwdwPY0G9pT
-      SERVER_PORT: 3000
-      SERVER_NAME: authentication-service
-      SECRET_KEY_JWT: abc
-      SECRET_KEY_PAYLOAD: abc
-      APP_API_KEY: cde
-      WEB_URL: http://localhost:3000
+  # nestjs:
+  #   build: .
+  #   container_name: nestjs_container
+  #   restart: always
+  #   depends_on:
+  #     - mysql
+  #     - minio
+  #   environment:
+  #     NODE_ENV: dev
+  #     MYSQL_HOST: mysql
+  #     MYSQL_PORT: 3306
+  #     MYSQL_USER: myuser
+  #     MYSQL_PASS: mypassword
+  #     MYSQL_DB: mydatabase
+  #     MINIO_END_POINT: minio
+  #     MINIO_PORT: 9000
+  #     MINIO_ACCESS_KEY: ie6bzq4fSzLHKG1f2L1E
+  #     MINIO_SECRET_KEY: ta60puhaZpXHOAOXF38NDdfVWWKOtLwdwPY0G9pT
+  #     SERVER_PORT: 3000
+  #     SERVER_NAME: authentication-service
+  #     SECRET_KEY_JWT: abc
+  #     SECRET_KEY_PAYLOAD: abc
+  #     APP_API_KEY: cde
+  #     WEB_URL: http://localhost:3000
 
 
-    ports:
-      - "3000:3000"
-    volumes:
-      - .:/app
-    command: >
-      sh -c "npm run start && npm run typeorm migration:run -- -d ./src/config/database.ts"
-    networks:
-      - default
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - .:/app
+  #   command: >
+  #     sh -c "npm run start && npm run typeorm migration:run -- -d ./src/config/database.ts"
+  #   networks:
+  #     - default
 
 
 volumes:
